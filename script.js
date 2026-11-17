@@ -318,3 +318,93 @@ randomBtn.addEventListener("click", function () {
 // ---------- Başlangıç ----------
 updateCounts();
 loadBrowse();
+// ---------- Film Detay ve Fragman Modalı ----------
+const movieModal = document.getElementById("movieModal");
+const modalBody = document.getElementById("modalBody");
+const closeModalBtn = document.getElementById("closeModalBtn");
+const modalBackdrop = document.getElementById("modalBackdrop");
+
+function closeModal() {
+    movieModal.classList.add("hidden");
+    modalBody.innerHTML = ""; // Videonun arka planda çalmaya devam etmesini durdurur
+}
+
+closeModalBtn.addEventListener("click", closeModal);
+modalBackdrop.addEventListener("click", closeModal);
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !movieModal.classList.contains("hidden")) {
+        closeModal();
+    }
+});
+
+// Kartın kendisine tıklandığında (kalp/göz butonları hariç) detayları aç
+movieBox.addEventListener("click", async function (event) {
+    if (event.target.closest("[data-action]")) return;
+
+    const card = event.target.closest(".movie-card");
+    if (!card) return;
+
+    const movieId = card.dataset.id;
+    openMovieDetails(movieId);
+});
+
+async function openMovieDetails(movieId) {
+    movieModal.classList.remove("hidden");
+    modalBody.innerHTML = `<p class="message">Film detayları ve fragman yükleniyor...</p>`;
+
+    try {
+        // Türkçe detay ve videoları çek
+        const resTr = await fetch(`${API_BASE}/movie/${movieId}?api_key=${API_KEY}&language=tr-TR&append_to_response=videos`);
+        const movie = await resTr.json();
+
+        // Türkçe özet veya Türkçe fragman yoksa İngilizce yedek veriyi çek
+        let overview = movie.overview;
+        let videos = movie.videos?.results || [];
+
+        if (!overview || videos.length === 0) {
+            const resEn = await fetch(`${API_BASE}/movie/${movieId}?api_key=${API_KEY}&language=en-US&append_to_response=videos`);
+            const movieEn = await resEn.json();
+            if (!overview) overview = movieEn.overview;
+            if (videos.length === 0) videos = movieEn.videos?.results || [];
+        }
+
+        // YouTube üzerinden resmi Trailer veya Teaser bul
+        const trailer = videos.find(v => v.site === "YouTube" && v.type === "Trailer")
+                     || videos.find(v => v.site === "YouTube");
+
+        const posterHTML = movie.poster_path
+            ? `<img class="modal-poster" src="${IMG_BASE}${movie.poster_path}" alt="${escapeHTML(movie.title)}">`
+            : "";
+
+        const year = movie.release_date ? movie.release_date.slice(0, 4) : "—";
+        const runtime = movie.runtime ? `${movie.runtime} dk` : "";
+        const genresHTML = (movie.genres || [])
+            .map(g => `<span class="genre-tag">${escapeHTML(g.name)}</span>`)
+            .join("");
+
+        const trailerHTML = trailer
+            ? `<div class="trailer-container">
+                   <iframe src="https://www.youtube.com/embed/${trailer.key}" 
+                           title="${escapeHTML(movie.title)} Trailer" 
+                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                           allowfullscreen></iframe>
+               </div>`
+            : `<p class="message">Bu film için fragman bulunamadı.</p>`;
+
+        modalBody.innerHTML = `
+            <div class="modal-header">
+                ${posterHTML}
+                <div class="modal-info">
+                    <h2 id="modalTitle">${escapeHTML(movie.title)}</h2>
+                    <p class="modal-meta">⭐ ${formatRating(movie)} &nbsp;|&nbsp; 📅 ${year} ${runtime ? `&nbsp;|&nbsp; ⏱️ ${runtime}` : ""}</p>
+                    <div class="modal-genres">${genresHTML}</div>
+                </div>
+            </div>
+            <p class="modal-overview">${escapeHTML(overview || "Bu film için özet bilgisi bulunmuyor.")}</p>
+            ${trailerHTML}
+        `;
+    } catch (error) {
+        console.error(error);
+        modalBody.innerHTML = `<p class="message">Film detayları yüklenirken bir hata oluştu.</p>`;
+    }
+}
