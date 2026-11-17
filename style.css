@@ -1,0 +1,333 @@
+:root {
+    --bg: #0F1115;
+    --surface: #1A1D24;
+    --text: #F5F5F5;
+    --muted: #A8B0BE;
+    --accent: #6C63FF;
+    --glow: rgba(108, 99, 255, 0.45);
+    --gold: #FFD166;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* ---------- Header ---------- */
+header {
+    padding: 30px;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+h1 {
+    font-size: 45px;
+    margin: 0;
+}
+
+h2 {
+    margin: 25px 0 15px;
+}
+
+.tagline {
+    color: var(--muted);
+    margin: 12px 0 20px;
+}
+
+.top-buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.nav-btn,
+.random-btn {
+    background-color: var(--surface);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nav-btn:hover,
+.random-btn:hover {
+    background-color: var(--accent);
+}
+
+.nav-btn.active {
+    background-color: var(--accent);
+    box-shadow: 0 0 18px var(--glow);
+}
+
+.count {
+    display: inline-block;
+    min-width: 22px;
+    margin-left: 4px;
+    padding: 2px 6px;
+    border-radius: 11px;
+    background: rgba(255, 255, 255, 0.15);
+    font-size: 12px;
+    text-align: center;
+}
+
+/* ---------- Arama, sıralama, rastgele ---------- */
+.toolbar {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+#movieInput {
+    flex: 1 1 260px;
+    max-width: 420px;
+    padding: 13px 18px;
+    border-radius: 25px;
+    border: 2px solid transparent;
+    background: var(--surface);
+    color: white;
+    font-size: 15px;
+}
+
+#movieInput:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+#movieInput::placeholder {
+    color: var(--muted);
+}
+
+#sortSelect {
+    padding: 13px 16px;
+    border-radius: 25px;
+    border: none;
+    background: var(--surface);
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+#randomMovieBox {
+    margin-top: 14px;
+    min-height: 24px;
+    color: var(--gold);
+    font-size: 20px;
+}
+
+/* ---------- Main ---------- */
+main {
+    padding: 0 30px 50px;
+}
+
+.genre-buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.genre-btn {
+    background-color: var(--surface);
+    color: white;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.genre-btn:hover,
+.genre-btn.active {
+    background-color: var(--accent);
+}
+
+.genre-btn.active {
+    box-shadow: 0 0 18px var(--glow);
+}
+
+/* ---------- Poster grid ---------- */
+.movies-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 25px;
+}
+
+.message {
+    grid-column: 1 / -1;
+    color: var(--muted);
+    margin: 20px 0;
+}
+
+.movie-card {
+    border-radius: 16px;
+    background: var(--surface);
+    box-shadow: 0 0 18px rgba(108, 99, 255, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.movie-card:hover {
+    transform: translateY(-10px) scale(1.04);
+    box-shadow: 0 0 35px var(--glow);
+    z-index: 2;
+}
+
+.poster {
+    position: relative;
+    aspect-ratio: 2 / 3;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.no-poster {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    background: #23262f;
+}
+
+/* Kalp ve izledim butonları */
+.icon-btn {
+    position: absolute;
+    top: 12px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+    font-size: 17px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.fav-btn {
+    left: 12px;
+}
+
+.watch-btn {
+    right: 12px;
+}
+
+.icon-btn:hover {
+    background: var(--accent);
+    transform: scale(1.1);
+}
+
+.icon-btn.active {
+    background: rgba(108, 99, 255, 0.85);
+}
+
+/* Başlık ve puan: üzerine gelince görünür */
+.overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 50px 14px 14px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.92), transparent);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+.overlay h3 {
+    margin: 0 0 6px;
+    font-size: 16px;
+}
+
+.overlay p {
+    margin: 0;
+    color: var(--gold);
+    font-size: 14px;
+}
+
+.movie-card:hover .overlay,
+.movie-card:focus-within .overlay {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Telefon gibi hover olmayan cihazlarda bilgi hep görünür */
+@media (hover: none) {
+    .overlay {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* İzlenmiş filmler biraz soluk */
+.movie-card.is-watched img {
+    opacity: 0.55;
+}
+
+/* Rastgele seçilen film */
+.movie-card.highlight {
+    animation: pick-pulse 1.2s ease 2;
+    box-shadow: 0 0 40px var(--gold);
+}
+
+@keyframes pick-pulse {
+    50% {
+        transform: scale(1.07);
+    }
+}
+
+/* ---------- Erişilebilirlik ve küçük ekranlar ---------- */
+button:focus-visible,
+select:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
+@media (max-width: 600px) {
+    header {
+        padding: 20px;
+    }
+
+    main {
+        padding: 0 20px 40px;
+    }
+
+    h1 {
+        font-size: 34px;
+    }
+
+    .movies-container {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 16px;
+    }
+}

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Project</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <div class="header-top">
+            <h1>Movie Project</h1>
+
+            <nav class="top-buttons">
+                <button class="nav-btn active" data-view="browse">🏠 Browse</button>
+                <button class="nav-btn" data-view="favorites">❤️ Favorites <span class="count" id="favCount">0</span></button>
+                <button class="nav-btn" data-view="watched">✅ Watched <span class="count" id="watchedCount">0</span></button>
+            </nav>
+        </div>
+
+        <p class="tagline">Discover your next favorite movie!</p>
+
+        <div class="toolbar">
+            <input type="text" id="movieInput" placeholder="Search movies..." autocomplete="off">
+
+            <select id="sortSelect" aria-label="Sort movies">
+                <option value="default">Sort: Default</option>
+                <option value="rating-desc">Rating: High to low</option>
+                <option value="rating-asc">Rating: Low to high</option>
+                <option value="date-desc">Newest first</option>
+            </select>
+
+            <button id="randomBtn" class="random-btn">🎲 Random</button>
+        </div>
+
+        <div id="randomMovieBox" aria-live="polite"></div>
+    </header>
+
+    <main>
+        <section>
+            <h2>Browse by Genre</h2>
+
+            <div class="genre-buttons">
+                <button class="genre-btn active" data-genre="top">🔥 Top Rated</button>
+                <button class="genre-btn" data-genre="28">Action</button>
+                <button class="genre-btn" data-genre="53">Thriller</button>
+                <button class="genre-btn" data-genre="35">Comedy</button>
+                <button class="genre-btn" data-genre="27">Horror</button>
+                <button class="genre-btn" data-genre="878">Sci-Fi</button>
+                <button class="genre-btn" data-genre="10749">Romance</button>
+            </div>
+        </section>
+
+        <section>
+            <h2 id="sectionTitle">🔥 Top Rated Movies</h2>
+            <div id="movieBox" class="movies-container"></div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
